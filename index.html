@@ -17,6 +17,10 @@
             --accent-glow: rgba(56, 189, 248, 0.3);
             --text: #f8fafc;
             --text-dim: #94a3b8;
+            /* Couleurs de niveaux */
+            --lvl-green: #22c55e;
+            --lvl-orange: #f59e0b;
+            --lvl-red: #ef4444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -132,17 +136,34 @@
             text-transform: uppercase;
         }
 
-        /* SKILLS LIST */
+        /* SKILLS LIST MODIFIÉ */
         .skill-item {
             background: #161e2d;
-            padding: 15px;
+            padding: 15px 20px;
             border-radius: 10px;
             margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 4px solid var(--accent);
+            border-left: 4px solid var(--accent); /* Couleur par défaut */
+            transition: 0.2s;
         }
+
+        /* Classes pour changer la couleur de la bordure gauche */
+        .skill-item.green { border-left-color: var(--lvl-green); }
+        .skill-item.orange { border-left-color: var(--lvl-orange); }
+        .skill-item.red { border-left-color: var(--lvl-red); }
+
+        /* Petit indicateur visuel à droite (optionnel) */
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .green .status-dot { background: var(--lvl-green); box-shadow: 0 0 10px var(--lvl-green); }
+        .orange .status-dot { background: var(--lvl-orange); box-shadow: 0 0 10px var(--lvl-orange); }
+        .red .status-dot { background: var(--lvl-red); box-shadow: 0 0 10px var(--lvl-red); }
 
         .footer {
             margin-top: 60px;
@@ -219,11 +240,30 @@
                 <p>Mon stack de développement habituel.</p>
             </div>
             <div style="max-width: 600px;">
-                <div class="skill-item"><span>Lua / GLua</span> <span class="tag">Expert</span></div>
-                <div class="skill-item"><span>SQL (MySQLOO / SQLite)</span> <span class="tag">Avancé</span></div>
-                <div class="skill-item"><span>Net Library (Networking)</span> <span class="tag">Expert</span></div>
-                <div class="skill-item"><span>Git / GitHub</span> <span class="tag">Intermédiaire</span></div>
-                <div class="skill-item"><span>VGUI / UI Design</span> <span class="tag">Avancé</span></div>
+                <div class="skill-item green">
+                    <span>Lua / GLua</span>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="skill-item green">
+                    <span>SQL (MySQLOO / SQLite)</span>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="skill-item green">
+                    <span>Net Library (Networking)</span>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="skill-item orange">
+                    <span>Git / GitHub</span>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="skill-item orange">
+                    <span>VGUI / UI Design</span>
+                    <div class="status-dot"></div>
+                </div>
+                <div class="skill-item red">
+                    <span>C++ (Exemple de niveau bas)</span>
+                    <div class="status-dot"></div>
+                </div>
             </div>
         </section>
 
@@ -245,27 +285,19 @@
     </div>
 
     <script>
-        // Initialise les icônes
         lucide.createIcons();
 
-        // LOGIQUE DE NAVIGATION
         const links = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.content-section');
 
         links.forEach(link => {
             link.addEventListener('click', () => {
                 const target = link.getAttribute('data-target');
-
-                // Update Menu
                 links.forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
-
-                // Update Sections
                 sections.forEach(s => {
                     s.classList.remove('active');
-                    if(s.id === target) {
-                        s.classList.add('active');
-                    }
+                    if(s.id === target) s.classList.add('active');
                 });
             });
         });
