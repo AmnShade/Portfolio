@@ -1,21 +1,180 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Mon Portfolio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmnShade | Lua Developer</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    background: #0f172a;
+    color: white;
+    display: flex;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #111827;
+    padding: 30px;
+    position: fixed;
+}
+
+.sidebar h1 {
+    font-size: 22px;
+    margin-bottom: 40px;
+    color: #38bdf8;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar ul li:hover {
+    color: #38bdf8;
+}
+
+/* MAIN CONTENT */
+
+.main {
+    margin-left: 250px;
+    padding: 40px;
+    width: 100%;
+}
+
+/* HEADER */
+
+.header {
+    margin-bottom: 40px;
+}
+
+.header h2 {
+    font-size: 28px;
+}
+
+.header p {
+    color: #94a3b8;
+    margin-top: 10px;
+}
+
+/* CARDS */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 25px;
+    border-radius: 15px;
+    transition: 0.3s;
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    background: #334155;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    color: #38bdf8;
+}
+
+.card p {
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+/* ANIMATION */
+
+.show {
+    transform: translateY(0);
+    opacity: 1;
+    transition: 0.6s ease;
+}
+
+.footer {
+    margin-top: 60px;
+    color: #64748b;
+    font-size: 14px;
+}
+</style>
 </head>
 <body>
-  <h1>Salut, moi c'est [Ton Nom]</h1>
-  <p>Développeur passionné par Lua, Garry's Mod et le game dev.</p>
 
-  <h2>Mes Projets</h2>
-  <ul>
-    <li>SWEPS Naruto sur Garry's Mod</li>
-    <li>Système de stats NindoRP</li>
-    <li>Addons Lua personnalisés</li>
-  </ul>
+<div class="sidebar">
+    <h1>AmnShade.dev</h1>
+    <ul>
+        <li>Dashboard</li>
+        <li>Projets</li>
+        <li>Compétences</li>
+        <li>Contact</li>
+    </ul>
+</div>
 
-  <h2>Contact</h2>
-  <p>Email : tonmail@email.com</p>
+<div class="main">
+    <div class="header">
+        <h2>Lua Developer</h2>
+        <p>Développeur spécialisé en scripting Lua, Garry's Mod & systèmes avancés.</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>SWEPS Naruto</h3>
+            <p>Création de compétences avancées avec effets personnalisés et systèmes de dégâts.</p>
+        </div>
+
+        <div class="card">
+            <h3>Système NindoRP</h3>
+            <p>Développement d'un système d'équilibrage complet : stats, buffs, résistances.</p>
+        </div>
+
+        <div class="card">
+            <h3>Optimisation Lua</h3>
+            <p>Amélioration des performances serveur et structuration modulaire du code.</p>
+        </div>
+
+        <div class="card">
+            <h3>Game Systems</h3>
+            <p>Création de mécaniques RPG complexes et interactions dynamiques.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 AmnShade — Portfolio Lua Developer
+    </div>
+</div>
+
+<script>
+const cards = document.querySelectorAll(".card");
+
+window.addEventListener("load", () => {
+    cards.forEach((card, index) => {
+        setTimeout(() => {
+            card.classList.add("show");
+        }, index * 200);
+    });
+});
+</script>
+
 </body>
 </html>
