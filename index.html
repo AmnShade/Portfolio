@@ -4,359 +4,570 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AmnShade | Lua Developer</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-
+    <title>Amine | Lua Developer</title>
+    <!-- Polices: Fira Code pour l'esthétique dev, Inter pour la lecture -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --bg: #0b0f1a;
-            --sidebar-bg: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.3);
-            --text: #f8fafc;
-            --text-dim: #94a3b8;
-            /* Couleurs de niveaux */
-            --lvl-green: #22c55e;
-            --lvl-orange: #f59e0b;
-            --lvl-red: #ef4444;
+            --bg-color: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+
+            /* Couleurs typiques éditeur syntaxique */
+            --kw-pink: #ff7b72;
+            --kw-blue: #79c0ff;
+            --kw-purple: #d2a8ff;
+            --kw-string: #a5d6ff;
+            --kw-green: #7ee787;
+            --kw-orange: #ffa657;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
-            background: var(--bg);
-            background-image: radial-gradient(circle at 2px 2px, #1e293b 1px, transparent 0);
-            background-size: 40px 40px;
-            color: var(--text);
-            display: flex;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: 260px;
-            background: var(--sidebar-bg);
-            border-right: 1px solid #1e293b;
-            padding: 40px 20px;
-            position: fixed;
-            height: 100vh;
-            z-index: 100;
-        }
-
-        .sidebar h1 {
-            font-size: 22px;
-            font-weight: 800;
-            margin-bottom: 40px;
-            padding-left: 15px;
-            color: var(--accent);
-            letter-spacing: 1px;
-        }
-
-        .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
-            color: var(--text-dim);
-            text-decoration: none;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent);
-        }
-
-        /* MAIN CONTENT */
-        .main {
-            margin-left: 260px;
-            padding: 60px;
-            width: calc(100% - 260px);
-        }
-
-        .content-section {
-            display: none;
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header {
-            margin-bottom: 40px;
-        }
-
-        .header h2 {
-            font-size: 36px;
-            font-weight: 800;
-        }
-
-        .header p {
-            color: var(--text-dim);
-            margin-top: 10px;
-            font-size: 18px;
-        }
-
-        /* CARDS & GRID */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid #2d3748;
-            padding: 25px;
-            border-radius: 16px;
-            transition: 0.3s;
-            position: relative;
-        }
-
-        .card:hover {
-            border-color: var(--accent);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px -10px var(--accent-glow);
-        }
-
-        .card i {
-            color: var(--accent);
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            margin-bottom: 10px;
-            font-size: 20px;
-        }
-
-        .card p {
-            color: var(--text-dim);
-            font-size: 15px;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, sans-serif;
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .tag {
-            display: inline-block;
-            background: #0f172a;
-            color: var(--accent);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-top: 15px;
-            text-transform: uppercase;
+        /* Typographie dev */
+        h1,
+        h2,
+        h3,
+        .code-font {
+            font-family: 'Fira Code', monospace;
         }
 
-        /* SKILLS LIST MODIFIÉ */
-        .skill-item {
-            background: #161e2d;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 10px;
+        a {
+            color: var(--kw-blue);
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--kw-string);
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Navigation Minimaliste */
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 4px solid var(--accent);
-            /* Couleur par défaut */
-            transition: 0.2s;
+            padding: 20px 0 60px 0;
+            border-bottom: 1px dashed var(--border);
+            margin-bottom: 60px;
         }
 
-        /* Classes pour changer la couleur de la bordure gauche */
-        .skill-item.green {
-            border-left-color: var(--lvl-green);
+        nav .logo {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
+            font-family: 'Fira Code', monospace;
         }
 
-        .skill-item.orange {
-            border-left-color: var(--lvl-orange);
+        nav .logo span {
+            color: var(--kw-pink);
         }
 
-        .skill-item.red {
-            border-left-color: var(--lvl-red);
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 28px;
         }
 
-        /* Petit indicateur visuel à droite (optionnel) */
-        .status-dot {
+        nav ul li a {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        nav ul li a:hover {
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        /* Bloc Editeur de Code (Hero Section) */
+        .editor-window {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 80px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .editor-window:hover {
+            transform: translateY(-2px);
+        }
+
+        .editor-header {
+            background: #010409;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
+        }
+
+        .dot.red {
+            background: #ff5f56;
+        }
+
+        .dot.yellow {
+            background: #ffbd2e;
+        }
+
+        .dot.green {
+            background: #27c93f;
+        }
+
+        .filename {
+            margin-left: 20px;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        .editor-content {
+            padding: 24px 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+
+        .line {
+            display: flex;
+            white-space: pre;
+        }
+
+        .line-num {
+            color: #484f58;
+            min-width: 35px;
+            user-select: none;
+            text-align: right;
+            margin-right: 20px;
+        }
+
+        /* Classes de coloration syntaxique pure CSS (sans lib) */
+        .k {
+            color: var(--kw-pink);
+        }
+
+        /* keyword */
+        .f {
+            color: var(--kw-purple);
+        }
+
+        /* function */
+        .s {
+            color: var(--kw-string);
+        }
+
+        /* string */
+        .v {
+            color: var(--kw-blue);
+        }
+
+        /* variable/ident */
+        .c {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* comment */
+        .o {
+            color: var(--text-main);
+        }
+
+        /* operator */
+        .n {
+            color: var(--kw-orange);
+        }
+
+        /* number */
+
+        /* Animation curseur terminal */
+        .cursor {
             display: inline-block;
+            width: 8px;
+            height: 1.2em;
+            background: var(--text-main);
+            vertical-align: middle;
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
         }
 
-        .green .status-dot {
-            background: var(--lvl-green);
-            box-shadow: 0 0 10px var(--lvl-green);
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
         }
 
-        .orange .status-dot {
-            background: var(--lvl-orange);
-            box-shadow: 0 0 10px var(--lvl-orange);
+        /* Sections standards */
+        section {
+            margin-bottom: 80px;
         }
 
-        .red .status-dot {
-            background: var(--lvl-red);
-            box-shadow: 0 0 10px var(--lvl-red);
+        .section-title {
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
         }
 
-        .footer {
-            margin-top: 60px;
-            padding-top: 20px;
-            border-top: 1px solid #1e293b;
-            color: #475569;
-            font-size: 14px;
+        .section-title::before {
+            content: "-- ";
+            color: var(--border);
+            margin-right: 12px;
+            font-weight: 400;
+        }
+
+        p {
+            margin-bottom: 18px;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 720px;
+        }
+
+        strong {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        /* Tags de compétences */
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .skill-tag {
+            background: rgba(121, 192, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--kw-blue);
+            color: var(--kw-blue);
+            background: rgba(121, 192, 255, 0.1);
+        }
+
+        /* Projets fausse grille Github */
+        .projects {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 650px) {
+            .projects {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .project-card {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 24px;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            border-color: var(--text-muted);
+            background: rgba(22, 27, 34, 0.5);
+        }
+
+        .project-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .project-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            color: var(--kw-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .project-desc {
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+
+        .project-tech {
+            display: flex;
+            gap: 16px;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-muted);
+        }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tech-lua::before {
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--kw-blue);
+        }
+
+        /* Liens de contact */
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            font-family: 'Fira Code', monospace;
+            margin-top: 30px;
+        }
+
+        .contact-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-main);
+            padding: 12px 20px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            width: fit-content;
+            background: var(--surface);
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .contact-links a:hover {
+            border-color: var(--kw-string);
+            color: var(--kw-string);
+            text-decoration: none;
+            transform: translateX(5px);
+        }
+
+        footer {
+            margin-top: 100px;
+            padding-bottom: 40px;
+            text-align: center;
+            color: var(--border);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="sidebar">
-        <h1>AMNSHADE_</h1>
+    <div class="container">
         <nav>
-            <div class="nav-link active" data-target="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</div>
-            <div class="nav-link" data-target="projets"><i data-lucide="code-2"></i> Projets</div>
-            <div class="nav-link" data-target="skills"><i data-lucide="terminal"></i> Compétences</div>
-            <div class="nav-link" data-target="contact"><i data-lucide="mail"></i> Contact</div>
+            <div class="logo">AmnShade<span>.lua</span></div>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Work</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
         </nav>
-    </div>
 
-    <div class="main">
-
-        <section id="dashboard" class="content-section active">
-            <div class="header">
-                <h2>Lua Developer</h2>
-                <p>Spécialiste Garry's Mod & Systèmes de jeu avancés.</p>
+        <!-- Code Editor Hero Section -->
+        <div class="editor-window">
+            <div class="editor-header">
+                <div class="dots">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                </div>
+                <div class="filename">init.lua</div>
             </div>
-            <div class="grid">
-                <div class="card">
-                    <i data-lucide="star"></i>
-                    <h3>Expertise GLua</h3>
-                    <p>Développement de scripts serveurs robustes et interfaces UI modernes (VGUI/DFrame).</p>
-                </div>
-                <div class="card">
-                    <i data-lucide="zap"></i>
-                    <h3>Performance</h3>
-                    <p>Optimisation des "Think" hooks et réduction de la charge réseau (Networking).</p>
-                </div>
+            <div class="editor-content">
+                <div class="line"><span class="line-num">1</span><span class="c">-- Programmation Lua &
+                        Engineering</span></div>
+                <div class="line"><span class="line-num">2</span><span class="k">local</span> <span
+                        class="v">developer</span> <span class="o">=</span> <span class="o">{</span></div>
+                <div class="line"><span class="line-num">3</span><span class="v"> name</span> <span class="o">=</span>
+                    <span class="s">"Amine"</span><span class="o">,</span></div>
+                <div class="line"><span class="line-num">4</span><span class="v"> alias</span> <span class="o">=</span>
+                    <span class="s">"AmnShade"</span><span class="o">,</span></div>
+                <div class="line"><span class="line-num">5</span><span class="v"> status</span> <span class="o">=</span>
+                    <span class="s">"Open to work"</span><span class="o">,</span></div>
+                <div class="line"><span class="line-num">6</span><span class="v"> focus</span> <span class="o">=</span>
+                    <span class="o">{</span><span class="s">"Clean Code"</span><span class="o">,</span> <span
+                        class="s">"Game Architecture"</span><span class="o">,</span> <span
+                        class="s">"Backend"</span><span class="o">}</span></div>
+                <div class="line"><span class="line-num">7</span><span class="o">}</span></div>
+                <div class="line"><span class="line-num">8</span></div>
+                <div class="line"><span class="line-num">9</span><span class="k">function</span> <span
+                        class="f">developer:hire</span><span class="o">()</span></div>
+                <div class="line"><span class="line-num">10</span><span class="v"> </span><span class="k">return</span>
+                    <span class="v">self</span><span class="o">.</span><span class="v">status</span> <span
+                        class="o">==</span> <span class="s">"Open to work"</span></div>
+                <div class="line"><span class="line-num">11</span><span class="k">end</span></div>
+                <div class="line"><span class="line-num">12</span></div>
+                <div class="line"><span class="line-num">13</span><span class="v">print</span><span
+                        class="o">(</span><span class="s">"Prêt à coder les systèmes de demain."</span><span
+                        class="o">)</span><span class="cursor"></span></div>
             </div>
-        </section>
-
-        <section id="projets" class="content-section">
-            <div class="header">
-                <h2>Mes Réalisations</h2>
-                <p>Une sélection de mes travaux les plus techniques.</p>
-            </div>
-            <div class="grid">
-                <div class="card">
-                    <i data-lucide="flame"></i>
-                    <h3>SWEPS Naruto Custom</h3>
-                    <p>Système de compétences avec gestion de "Chakra" et effets visuels complexes.</p>
-                    <span class="tag">GLua / Client-Side</span>
-                </div>
-                <div class="card">
-                    <i data-lucide="database"></i>
-                    <h3>NindoRP Core</h3>
-                    <p>Framework complet : sauvegarde SQL, système de rangs et équilibrage dynamique.</p>
-                    <span class="tag">MySQL / Backend</span>
-                </div>
-                <div class="card">
-                    <i data-lucide="box"></i>
-                    <h3>Inventory System</h3>
-                    <p>Interface glisser-déposer (Drag & Drop) optimisée pour le Roleplay.</p>
-                    <span class="tag">UI Design</span>
-                </div>
-            </div>
-        </section>
-
-        <section id="skills" class="content-section">
-            <div class="header">
-                <h2>Compétences Techniques</h2>
-                <p>Mon stack de développement habituel.</p>
-            </div>
-            <div style="max-width: 600px;">
-                <div class="skill-item green">
-                    <span>Lua / GLua</span>
-                    <div class="status-dot"></div>
-                </div>
-                <div class="skill-item green">
-                    <span>SQL (MySQLOO / SQLite)</span>
-                    <div class="status-dot"></div>
-                </div>
-                <div class="skill-item green">
-                    <span>Net Library (Networking)</span>
-                    <div class="status-dot"></div>
-                </div>
-                <div class="skill-item orange">
-                    <span>Git / GitHub</span>
-                    <div class="status-dot"></div>
-                </div>
-                <div class="skill-item orange">
-                    <span>VGUI / UI Design</span>
-                    <div class="status-dot"></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="content-section">
-            <div class="header">
-                <h2>Me Contacter</h2>
-                <p>Disponible pour des projets ambitieux ou un poste en entreprise.</p>
-            </div>
-            <div class="card" style="max-width: 400px;">
-                <p><strong>Discord :</strong> AmnShade#0000</p><br>
-                <p><strong>Email :</strong> contact@amnshade.dev</p><br>
-                <p><strong>GitHub :</strong> github.com/AmnShade</p>
-            </div>
-        </section>
-
-        <div class="footer">
-            © 2026 AmnShade — Portfolio créé pour l'excellence technique.
         </div>
+
+        <section id="about">
+            <h2 class="section-title">Whoami</h2>
+            <p>Salut, je suis <strong>Amine</strong>. Je suis un développeur passionné par la conception de systèmes
+                solides et performants, particulièrement en <strong>Lua</strong>. J'ai passé beaucoup de temps sur l'API
+                de <em>Garry's Mod</em> (GLua), ce qui m'a poussé à maîtriser la gestion client/serveur, l'optimisation
+                réseau et la création d'interfaces (VGUI) adaptatives.</p>
+            <p>Je n'aime pas le code générique ; je préfère l'ingénierie réfléchie, les architectures scalables et la
+                résolution de problèmes complexes (hitboxes dynamiques, data binding, asynchrone SQL). Je cherche
+                aujourd'hui à mettre toute cette expérience au sein d'une entreprise ou d'une équipe de dev
+                professionnelle.</p>
+
+            <div style="margin-top: 35px;">
+                <p
+                    style="margin-bottom: 12px; font-family: 'Fira Code', monospace; font-size: 0.9em; color: var(--border);">
+                    > cat skills.txt</p>
+                <div class="skills-list">
+                    <span class="skill-tag">Lua 5.1 / LuaJIT</span>
+                    <span class="skill-tag">GLua (Garry's Mod API)</span>
+                    <span class="skill-tag">Game Logic / Architecture</span>
+                    <span class="skill-tag">Networking (Net Lib)</span>
+                    <span class="skill-tag">UI/UX (VGUI)</span>
+                    <span class="skill-tag">SQL (MySQLOO/SQLite)</span>
+                    <span class="skill-tag">Git / GitHub</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2 class="section-title">Selected Work</h2>
+            <div class="projects">
+
+                <div class="project-card">
+                    <div class="project-top">
+                        <!-- Sans lien précis, on indique juste la tech # -->
+                        <a href="#" class="project-title">Kenjutsu Combat Core</a>
+                    </div>
+                    <p class="project-desc">Système de combat avancé incluant gestion de hitboxes dynamiques (TLS),
+                        système de combos complexes et effets synchronisés.</p>
+                    <div class="project-tech">
+                        <div class="tech-item tech-lua">GLua</div>
+                        <div class="tech-item">Client/Server</div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-top">
+                        <a href="#" class="project-title">Framework Modulaire</a>
+                    </div>
+                    <p class="project-desc">Base de développement centralisée pour armes et classes. Permet de partager
+                        la configuration sh_config de façon asynchrone et propre.</p>
+                    <div class="project-tech">
+                        <div class="tech-item tech-lua">Lua</div>
+                        <div class="tech-item">Architecture</div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-top">
+                        <a href="#" class="project-title">Responsive VGUI</a>
+                    </div>
+                    <p class="project-desc">Module gérant les interfaces joueurs (menus d'animations, context menus) qui
+                        s'adapte automatiquement à la résolution de l'écran (1080p -> 4k).</p>
+                    <div class="project-tech">
+                        <div class="tech-item tech-lua">GLua</div>
+                        <div class="tech-item">UI System</div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-top">
+                        <a href="#" class="project-title">Backend Asynchrone</a>
+                    </div>
+                    <p class="project-desc">Module Roleplay performant gérant la sauvegarde asynchrone SQL pour éviter
+                        tout lag côté serveur lors des requêtes d'inventaire ou de monnaie.</p>
+                    <div class="project-tech">
+                        <div class="tech-item tech-lua">Lua</div>
+                        <div class="tech-item">MySQL</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2 class="section-title">Contact</h2>
+            <p>Ma boîte de réception est ouverte. Vous cherchez un développeur Lua expérimenté et rigoureux pour votre
+                projet ou votre studio ? Discutons-en.</p>
+
+            <div class="contact-links">
+                <a href="mailto:contact@amnshade.dev">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    contact@amnshade.dev
+                </a>
+                <a href="https://github.com/AmnShade" target="_blank">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2">
+                        <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                        </path>
+                    </svg>
+                    github.com/AmnShade
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            <p>-- EOF</p>
+        </footer>
     </div>
-
-    <script>
-        lucide.createIcons();
-
-        const links = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('.content-section');
-
-        links.forEach(link => {
-            link.addEventListener('click', () => {
-                const target = link.getAttribute('data-target');
-                links.forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                sections.forEach(s => {
-                    s.classList.remove('active');
-                    if (s.id === target) s.classList.add('active');
-                });
-            });
-        });
-    </script>
 
 </body>
 
