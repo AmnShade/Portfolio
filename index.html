@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AmnShade | Lua Developer</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -23,7 +24,12 @@
             --lvl-red: #ef4444;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
         body {
             background: var(--bg);
@@ -68,7 +74,8 @@
             cursor: pointer;
         }
 
-        .nav-link:hover, .nav-link.active {
+        .nav-link:hover,
+        .nav-link.active {
             background: rgba(56, 189, 248, 0.1);
             color: var(--accent);
         }
@@ -90,13 +97,31 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .header { margin-bottom: 40px; }
-        .header h2 { font-size: 36px; font-weight: 800; }
-        .header p { color: var(--text-dim); margin-top: 10px; font-size: 18px; }
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header h2 {
+            font-size: 36px;
+            font-weight: 800;
+        }
+
+        .header p {
+            color: var(--text-dim);
+            margin-top: 10px;
+            font-size: 18px;
+        }
 
         /* CARDS & GRID */
         .grid {
@@ -120,9 +145,21 @@
             box-shadow: 0 10px 30px -10px var(--accent-glow);
         }
 
-        .card i { color: var(--accent); margin-bottom: 15px; }
-        .card h3 { margin-bottom: 10px; font-size: 20px; }
-        .card p { color: var(--text-dim); font-size: 15px; line-height: 1.6; }
+        .card i {
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 15px;
+            line-height: 1.6;
+        }
 
         .tag {
             display: inline-block;
@@ -145,14 +182,23 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 4px solid var(--accent); /* Couleur par défaut */
+            border-left: 4px solid var(--accent);
+            /* Couleur par défaut */
             transition: 0.2s;
         }
 
         /* Classes pour changer la couleur de la bordure gauche */
-        .skill-item.green { border-left-color: var(--lvl-green); }
-        .skill-item.orange { border-left-color: var(--lvl-orange); }
-        .skill-item.red { border-left-color: var(--lvl-red); }
+        .skill-item.green {
+            border-left-color: var(--lvl-green);
+        }
+
+        .skill-item.orange {
+            border-left-color: var(--lvl-orange);
+        }
+
+        .skill-item.red {
+            border-left-color: var(--lvl-red);
+        }
 
         /* Petit indicateur visuel à droite (optionnel) */
         .status-dot {
@@ -161,9 +207,21 @@
             border-radius: 50%;
             display: inline-block;
         }
-        .green .status-dot { background: var(--lvl-green); box-shadow: 0 0 10px var(--lvl-green); }
-        .orange .status-dot { background: var(--lvl-orange); box-shadow: 0 0 10px var(--lvl-orange); }
-        .red .status-dot { background: var(--lvl-red); box-shadow: 0 0 10px var(--lvl-red); }
+
+        .green .status-dot {
+            background: var(--lvl-green);
+            box-shadow: 0 0 10px var(--lvl-green);
+        }
+
+        .orange .status-dot {
+            background: var(--lvl-orange);
+            box-shadow: 0 0 10px var(--lvl-orange);
+        }
+
+        .red .status-dot {
+            background: var(--lvl-red);
+            box-shadow: 0 0 10px var(--lvl-red);
+        }
 
         .footer {
             margin-top: 60px;
@@ -174,6 +232,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="sidebar">
@@ -187,7 +246,7 @@
     </div>
 
     <div class="main">
-        
+
         <section id="dashboard" class="content-section active">
             <div class="header">
                 <h2>Lua Developer</h2>
@@ -260,10 +319,6 @@
                     <span>VGUI / UI Design</span>
                     <div class="status-dot"></div>
                 </div>
-                <div class="skill-item red">
-                    <span>C++ (Exemple de niveau bas)</span>
-                    <div class="status-dot"></div>
-                </div>
             </div>
         </section>
 
@@ -297,11 +352,12 @@
                 link.classList.add('active');
                 sections.forEach(s => {
                     s.classList.remove('active');
-                    if(s.id === target) s.classList.add('active');
+                    if (s.id === target) s.classList.add('active');
                 });
             });
         });
     </script>
 
 </body>
+
 </html>
