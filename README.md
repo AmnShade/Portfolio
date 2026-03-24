@@ -23,4 +23,4 @@ Passionné par le développement technique, je crée des solutions complètes so
 
 ---
 
-📫 ** Contactez-moi sur Discord :** `AmnShade`
+📫 Contactez-moi sur Discord : `AmnShade`
