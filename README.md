@@ -1,4 +1,4 @@
-# Salut, moi c'est [Amine]
+# Salut, moi c'est Amine
 ### Développeur Lua | Systems & UI Specialist
 
 Passionné par le développement technique, je crée des solutions complètes sous Lua. Mon truc, c'est de transformer des idées complexes en systèmes fluides, de l'architecture backend jusqu'à l'interface finale.
@@ -23,4 +23,4 @@ Passionné par le développement technique, je crée des solutions complètes so
 
 ---
 
-📫 ** Contactez-moi sur Discord : `[AmnShade]`
+📫 ** Contactez-moi sur Discord : `AmnShade`
