@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio d'Amine (AmnShade), développeur Lua spécialisé dans Garry's Mod, l'optimisation réseau et la création d'UI/UX.">
+    <meta property="og:title" content="Amine | Lua Developer">
+    <meta property="og:description" content="Développeur Lua passionné (GLua, MySQL, VGUI, Net Lib). Ouvert aux opportunités !">
+    <meta property="og:color" content="#79c0ff">
+    <title>Amine | Lua Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --kw-pink: #ff7b72;
+            --kw-blue: #79c0ff;
+            --kw-purple: #d2a8ff;
+            --kw-string: #a5d6ff;
+            --kw-green: #7ee787;
+            --kw-orange: #ffa657;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1,
+        h2,
+        h3,
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+
+        a {
+            color: var(--kw-blue);
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--kw-string);
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0 60px 0;
+            border-bottom: 1px dashed var(--border);
+            margin-bottom: 60px;
+        }
+
+        nav .logo {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-main);
+            font-family: 'Fira Code', monospace;
+        }
+
+        nav .logo span {
+            color: var(--kw-pink);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 28px;
+        }
+
+        nav ul li a {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        nav ul li a:hover {
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .editor-window {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 80px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .editor-window:hover {
+            transform: translateY(-2px);
+        }
+
+        .editor-header {
+            background: #010409;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .filename {
+            margin-left: 20px;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        .editor-content {
+            padding: 24px 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+
+        .line {
+            display: flex;
+            white-space: pre;
+        }
+
+        .line-num {
+            color: #484f58;
+            min-width: 35px;
+            user-select: none;
+            text-align: right;
+            margin-right: 20px;
+        }
+
+        .k { color: var(--kw-pink); }
+        .f { color: var(--kw-purple); }
+        .s { color: var(--kw-string); }
+        .v { color: var(--kw-blue); }
+        .c { color: var(--text-muted); font-style: italic; }
+        .o { color: var(--text-main); }
+        .n { color: var(--kw-orange); }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.2em;
+            background: var(--text-main);
+            vertical-align: middle;
+            animation: clignoter 1s step-end infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes clignoter {
+            50% { opacity: 0; }
+        }
+
+        section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: "-- ";
+            color: var(--border);
+            margin-right: 12px;
+            font-weight: 400;
+        }
+
+        p {
+            margin-bottom: 18px;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 720px;
+        }
+
+        strong {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .skill-tag {
+            background: rgba(121, 192, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--kw-blue);
+            color: var(--kw-blue);
+            background: rgba(121, 192, 255, 0.1);
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 650px) {
+            .projects {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .project-card {
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 24px;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            border-color: var(--text-muted);
+            background: rgba(22, 27, 34, 0.5);
+        }
+
+        .project-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .project-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            color: var(--kw-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .project-desc {
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+
+        .project-tech {
+            display: flex;
+            gap: 16px;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-muted);
+        }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tech-lua::before {
+            content: "";
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--kw-blue);
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            font-family: 'Fira Code', monospace;
+            margin-top: 30px;
+        }
+
+        .contact-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-main);
+            padding: 12px 20px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            width: fit-content;
+            background: var(--surface);
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .contact-links a:hover {
+            border-color: var(--kw-string);
+            color: var(--kw-string);
+            text-decoration: none;
+            transform: translateX(5px);
+        }
+
+        footer {
+            margin-top: 100px;
+            padding-bottom: 40px;
+            text-align: center;
+            color: var(--border);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+        }
+
+        .portfolio-container {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .portfolio-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 240px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            border-left: 2px solid var(--border);
+            color: var(--text-muted);
+            padding: 12px 20px;
+            text-align: left;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.02);
+            border-left-color: var(--text-muted);
+        }
+
+        .tab-btn.actif {
+            color: var(--kw-blue);
+            border-left-color: var(--kw-blue);
+            background: rgba(121, 192, 255, 0.08);
+            font-weight: 500;
+        }
+
+        .portfolio-content {
+            flex-grow: 1;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .panneau {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            animation: apparition 0.4s ease-out forwards;
+        }
+
+        .panneau.actif {
+            display: flex;
+        }
+
+        @keyframes apparition {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .system-item {
+            display: flex;
+            gap: 20px;
+            background: rgba(22, 27, 34, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .system-item:hover {
+            border-color: #484f58;
+            transform: translateX(5px);
+            background: rgba(22, 27, 34, 0.8);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .system-img {
+            width: 140px;
+            height: 100px;
+            background: #0d1117;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: filter 0.25s ease;
+        }
+
+        .img-tooltip {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(1, 4, 9, 0.65);
+            color: #fff;
+            font-size: 0.75rem;
+            font-family: 'Fira Code', monospace;
+            text-align: center;
+            padding: 6px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+            border-radius: 6px;
+        }
+
+        .img-wrapper:hover .img-tooltip {
+            opacity: 1;
+        }
+
+        .img-wrapper:hover img {
+            filter: brightness(0.55);
+        }
+
+        .system-img.multi {
+            height: auto;
+            flex-direction: column;
+            gap: 8px;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+
+        .system-img.multi .img-wrapper {
+            height: 88px;
+        }
+
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+            animation: apparitionLightbox 0.2s ease;
+        }
+
+        #lightbox.ouvert {
+            display: flex;
+        }
+
+        @keyframes apparitionLightbox {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        #lightbox img {
+            max-width: 92vw;
+            max-height: 92vh;
+            object-fit: contain;
+            border-radius: 6px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            cursor: default;
+        }
+
+        #fermer-lightbox {
+            position: fixed;
+            top: 20px;
+            right: 28px;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+            line-height: 1;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        #fermer-lightbox:hover {
+            opacity: 1;
+        }
+
+        .system-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .system-info h4 {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 500;
+        }
+
+        .system-info p {
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+            flex-grow: 1;
+        }
+
+        .system-tech {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .system-tech span {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            background: rgba(139, 148, 158, 0.1);
+            border-radius: 12px;
+            color: var(--text-muted);
+            font-family: 'Inter', sans-serif;
+            border: 1px solid rgba(139, 148, 158, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .portfolio-tabs {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 10px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .tab-btn {
+                border-left: none;
+                border-bottom: 2px solid transparent;
+                white-space: nowrap;
+            }
+
+            .tab-btn.actif {
+                border-left-color: transparent;
+                border-bottom-color: var(--kw-blue);
+            }
+
+            .system-item {
+                flex-direction: column;
+            }
+
+            .system-img {
+                width: 100%;
+                height: 160px;
+            }
+
+            .system-item:hover {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <nav>
+            <div class="logo">AmnShade<span>.lua</span></div>
+            <ul>
+                <li><a href="#about">À propos</a></li>
+                <li><a href="#projects">Réalisations</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="editor-window">
+            <div class="editor-header">
+                <div class="dots">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                </div>
+                <div class="filename">init.lua</div>
+            </div>
+            <div class="editor-content">
+                <div class="line"><span class="line-num">1</span><span class="k">local </span> <span class="v">developer</span> <span class="o">=</span> <span class="o">{</span></div>
+                <div class="line"><span class="line-num">2</span><span class="v"> name</span> <span class="o">=</span>
+                    <span class="s">"Amine"</span><span class="o">,</span>
+                </div>
+                <div class="line"><span class="line-num">3</span><span class="v"> alias</span> <span class="o">=</span>
+                    <span class="s">"AmnShade"</span><span class="o">,</span>
+                </div>
+                <div class="line"><span class="line-num">4</span><span class="v"> status</span> <span class="o">=</span>
+                    <span class="s">"Open to work"</span><span class="o">,</span>
+                </div>
+                <div class="line">
+                    <span class="line-num">5</span><span class="v"> focus</span> <span class="o">=</span> <span class="o">{</span><span class="s">"Modular Frameworks"</span><span class="o">,</span> <span class="s">"Adaptive UI/UX Design"</span><span class="o">,</span> <span class="s">"Low-Latency Networking"</span><span class="o">}</span>
+                </div>
+                <div class="line"><span class="line-num">6</span></div>
+                <div class="line"><span class="line-num">7</span><span class="k">function </span> <span class="f">developer:hire</span><span class="o">()</span></div>
+                <div class="line"><span class="line-num">8</span><span class="v"> </span><span class="k">return </span>
+                    <span class="v">self</span><span class="o">.</span><span class="v">status</span> <span class="o">==</span> <span class="s">"Open to work"</span>
+                </div>
+                <div class="line"><span class="line-num">9</span><span class="k">end</span></div>
+                <div class="line"><span class="line-num">10</span></div>
+                <div class="line"><span class="line-num">11</span><span class="v">print</span><span class="o">(</span><span class="s">"Toujours prêt à coder !"</span><span class="o">)</span><span class="cursor"></span></div>
+            </div>
+        </div>
+
+        <section id="about">
+            <h2 class="section-title">Qui suis-je ?</h2>
+            <p>
+                Salut, je suis <strong>Amine</strong>, 18 ans et je suis un développeur passionné par la conception de
+                systèmes, particulièrement en <strong>Lua</strong>. J'ai passé beaucoup de temps sur l'API
+                de <em>Garry's Mod</em> (GLua), ce qui m'a poussé à maîtriser la gestion client/serveur, l'optimisation
+                réseau et la création d'interfaces (VGUI).
+            </p>
+
+            <div style="margin-top: 35px;">
+                <p style="margin-bottom: 12px; font-family: 'Fira Code', monospace; font-size: 0.9em; color: var(--border);">
+                    > cat skills.txt</p>
+                <div class="skills-list">
+                    <span class="skill-tag">Lua</span>
+                    <span class="skill-tag">GLua (Garry's Mod API)</span>
+                    <span class="skill-tag">Systems &amp; Architecture</span>
+                    <span class="skill-tag">Gameplay Programming</span>
+                    <span class="skill-tag">SWEP Making</span>
+                    <span class="skill-tag">Networking (Net Lib)</span>
+                    <span class="skill-tag">UI/UX (VGUI)</span>
+                    <span class="skill-tag">Database (MySQL)</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h2 class="section-title">Réalisations &amp; Expertise</h2>
+
+            <div class="portfolio-container">
+                <div class="portfolio-tabs">
+                    <button class="tab-btn actif" data-cible="sys-design">Systems Designer</button>
+                    <button class="tab-btn" data-cible="gameplay">Gameplay Programmer</button>
+                    <button class="tab-btn" data-cible="swepmaker">Swepmaker</button>
+                    <button class="tab-btn" data-cible="uiux">UI/UX &amp; VGUI</button>
+                    <button class="tab-btn" data-cible="nanos">Nanos</button>
+                </div>
+
+                <div class="portfolio-content">
+
+                    <div class="panneau actif" id="sys-design">
+                        <div class="system-item">
+                            <div class="system-img multi">
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/bv9qiu.png')">
+                                    <img src="https://files.catbox.moe/bv9qiu.png" alt="Inventaire screenshot 1">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/z6qxt9.png')">
+                                    <img src="https://files.catbox.moe/z6qxt9.png" alt="Inventaire screenshot 2">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                            </div>
+                            <div class="system-info">
+                                <h4>Inventaire &amp; Économie (MySQL)</h4>
+                                <p>Système d'inventaire optimisé sauvegardé en temps réel. Gestion des équipements
+                                    octroyant des statistiques ainsi que des tenues, masques et accessoires.
+                                    Implémentation d'un système d'économie complet avec monnaie, marketplace et NPC
+                                    vendeurs.</p>
+                                <div class="system-tech">
+                                    <span>MySQL</span><span>Data Structure</span><span>Economy</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="system-item">
+                            <div class="system-info">
+                                <h4>Optimisation &amp; Sécurité Réseau</h4>
+                                <p>Architecture réseau robuste (Net Lib). Implémentation de vérifications serveur
+                                    strictes anti-exploit et optimisation des envois pour 100+ joueurs.</p>
+                                <div class="system-tech">
+                                    <span>Net Lib</span><span>Sécurité</span><span>Real-time</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panneau" id="gameplay">
+                        <div class="system-item">
+                            <div class="system-img multi">
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/8imxfg.png')">
+                                    <img src="https://files.catbox.moe/8imxfg.png" alt="Combat screenshot 1">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/msqnyf.png')">
+                                    <img src="https://files.catbox.moe/msqnyf.png" alt="Combat screenshot 2">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                            </div>
+                            <div class="system-info">
+                                <h4>Système de Combat &amp; Raccourcis</h4>
+                                <p>Framework complet avec combos dynamiques par classe et hitboxes précises. Intégration
+                                    d'une barre de capacités (Jutsus équipables depuis le menu) gérant parfaitement la
+                                    sélection ainsi que le lancement des jutsus sélectionnés.</p>
+                                <div class="system-tech">
+                                    <span>Combat Design</span><span>Action Bar</span><span>Cooldowns</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="system-item">
+                            <div class="system-img">
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/rrzgyo.png')">
+                                    <img src="https://files.catbox.moe/rrzgyo.png" alt="Chakra screenshot">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                            </div>
+                            <div class="system-info">
+                                <h4>Framework Global Jutsus &amp; Chakra</h4>
+                                <p>Système de progression interconnecté : implémentation du Chakra, d'un système de
+                                    niveaux octroyant des points de compétences, et logique complète de
+                                    déblocage/amélioration des Jutsus.</p>
+                                <div class="system-tech">
+                                    <span>Game Logic</span><span>RPG Systems</span><span>Levels</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="system-item">
+                            <div class="system-img">
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/gzuztj.png')">
+                                    <img src="https://files.catbox.moe/gzuztj.png" alt="Menu contextuel screenshot">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                            </div>
+                            <div class="system-info">
+                                <h4>Menus contextuels personnalisés</h4>
+                                <p>Système de menus contextuels personnalisés pour les joueurs, permettant d'interagir
+                                    avec le monde, les joueurs et les objets.</p>
+                                <div class="system-tech">
+                                    <span>VGUI</span><span>Context Menu</span><span>Interactions</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panneau" id="swepmaker">
+                        <div class="system-item">
+                            <div class="system-img multi">
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/egzank.png')">
+                                    <img src="https://files.catbox.moe/egzank.png" alt="Jutsu screenshot 1">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/v3ykmg.png')">
+                                    <img src="https://files.catbox.moe/v3ykmg.png" alt="Jutsu screenshot 2">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/62tyw5.png')">
+                                    <img src="https://files.catbox.moe/62tyw5.png" alt="Jutsu screenshot 3">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/adkjuz.png')">
+                                    <img src="https://files.catbox.moe/adkjuz.png" alt="Jutsu screenshot 4">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/y6q9zd.png')">
+                                    <img src="https://files.catbox.moe/y6q9zd.png" alt="Jutsu screenshot 5">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                            </div>
+                            <div class="system-info">
+                                <h4>Jutsus</h4>
+                                <p>Développement de nombreux jutsus de tout type pour un PVP inédit et unique avec des
+                                    combos, des mécaniques et des effets visuels impressionnants.<br><br><strong>Jutsu de
+                                        nature</strong> : Doton, Katon, Raiton, Suiton,
+                                    Futon.<br><strong>Kekkei-Genkai</strong>
+                                    : Bakuton, Deiton, Hyoton,
+                                    Meiton, Purple Raiton, Raikami, Taiton.<br><strong>Jutsu de classe et d'art
+                                        ninja</strong>.<br><strong>Jutsu de clan</strong> : Hyuga, Uchiha, Senju, Sabaku
+                                    (Sable), Sonizu (Lumière), Taku (Flamme bleue).</p>
+                                <div class="system-tech">
+                                    <span>SWEP API</span><span>Particles</span><span>Entities</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="system-item">
+                            <div class="system-info">
+                                <h4>Sweps</h4>
+                                <p>Création de sweps pour passer en mode jutsu, d'une caméra 360° autour du joueur
+                                    pour de meilleurs points de vue et de menottes pour la section policière.</p>
+                                <div class="system-tech">
+                                    <span>Sweps</span><span>Holdtype</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panneau" id="uiux">
+                        <div class="system-item">
+                            <div class="system-img multi">
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/ny01aq.png')">
+                                    <img src="https://files.catbox.moe/ny01aq.png" alt="Character Creator screenshot 1">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/rhwkyd.png')">
+                                    <img src="https://files.catbox.moe/rhwkyd.png" alt="Character Creator screenshot 2">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/n87ugr.png')">
+                                    <img src="https://files.catbox.moe/n87ugr.png" alt="Character Creator screenshot 3">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                            </div>
+                            <div class="system-info">
+                                <h4>Character Creator</h4>
+                                <p>Système de création de personnage avec personnalisation complète, choix
+                                    de la faction désirée, choix du nom, du genre, de la coiffure, de la couleur de
+                                    peau, des yeux, des pupilles, du visage, des lèvres, du nez, des sourcils, etc.</p>
+                                <div class="system-tech">
+                                    <span>VGUI</span><span>Menu Interactif</span><span>Data Binding</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="system-item">
+                            <div class="system-img multi">
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/t6ea70.png')">
+                                    <img src="https://files.catbox.moe/t6ea70.png" alt="Boutique screenshot 1">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/mqkmdj.png')">
+                                    <img src="https://files.catbox.moe/mqkmdj.png" alt="Boutique screenshot 2">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/inj3r3.png')">
+                                    <img src="https://files.catbox.moe/inj3r3.png" alt="Boutique screenshot 3">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                            </div>
+                            <div class="system-info">
+                                <h4>Interface de Boutique Immersive</h4>
+                                <p>Conception d'une interface d'achat optimisée pour une navigation fluide. Le système
+                                    intègre des rerolls, des packs de cosmétiques ainsi que des rangs pour obtenir un
+                                    coupe-file ainsi qu'un boost d'expérience.</p>
+                                <div class="system-tech">
+                                    <span>VGUI</span><span>UX Flow</span><span>Drag &amp; Drop</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="system-item">
+                            <div class="system-img">
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/9xm7b8.png')">
+                                    <img src="https://files.catbox.moe/9xm7b8.png" alt="HUD screenshot">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                            </div>
+                            <div class="system-info">
+                                <h4>HUD Personnalisé</h4>
+                                <p>Un HUD personnalisé responsive avec des valeurs mises à jour en temps réel (chakra, vie,
+                                    faim, niveau).</p>
+                                <div class="system-tech">
+                                    <span>HUD</span><span>UI Design</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panneau" id="nanos">
+                        <div class="system-item">
+                            <div class="system-img">
+                                <div class="img-wrapper" onclick="ouvrirImage('https://files.catbox.moe/u7rmht.png')">
+                                    <img src="https://files.catbox.moe/u7rmht.png" alt="SAM Nanos screenshot">
+                                    <div class="img-tooltip">&#128269; Cliquez pour passer en plein écran</div>
+                                </div>
+                            </div>
+                            <div class="system-info">
+                                <h4>SAM sur Nanos</h4>
+                                <p>J'ai également expérimenté sur Nanos World, où j'ai développé un système
+                                    d'administration complet équivalent à SAM sur Garry's Mod. Ce projet intègre des
+                                    fonctionnalités de gestion de bannissements et de permissions via une interface
+                                    WebUI (HTML/CSS/JS). Pour rendre le système plus puissant, j'ai conçu un
+                                    <strong>Wrapper d'API</strong>, une structure qui simplifie la création de commandes
+                                    personnalisées et permet au menu de communiquer instantanément avec le serveur pour
+                                    exécuter les actions de modération en toute sécurité.
+                                </p>
+                                <div class="system-tech">
+                                    <span>Nanos</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2 class="section-title">Contact</h2>
+            <p>Je suis toujours disponible, n'hésitez pas à me contacter pour toute information complémentaire via
+                Discord ou par mail.</p>
+
+            <div class="contact-links">
+                <a href="mailto:amine.ryuzx@gmail.com">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    amine.ryuzx@gmail.com
+                </a>
+                <a href="https://discord.com/users/711545002882367519" target="_blank">
+                    <img src="https://www.ouiheberg.com/assets/img/bot-hero-discord.png" alt="Discord" width="25"
+                        height="25" style="vertical-align: middle;">
+                    Amzr
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            <p>-- Amn</p>
+        </footer>
+    </div>
+
+    <div id="lightbox" onclick="fermerImage()">
+        <span id="fermer-lightbox" onclick="fermerImage()">✕</span>
+        <img id="lightbox-img" src="" alt="Plein écran" onclick="event.stopPropagation()">
+    </div>
+
+    <script>
+        function ouvrirImage(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').classList.add('ouvert');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fermerImage() {
+            document.getElementById('lightbox').classList.remove('ouvert');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') fermerImage();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var boutons = document.querySelectorAll('.tab-btn');
+            var panneaux = document.querySelectorAll('.panneau');
+
+            boutons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var cible = btn.getAttribute('data-cible');
+
+                    boutons.forEach(function(b) { b.classList.remove('actif'); });
+                    panneaux.forEach(function(p) { p.classList.remove('actif'); });
+
+                    btn.classList.add('actif');
+                    document.getElementById(cible).classList.add('actif');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
